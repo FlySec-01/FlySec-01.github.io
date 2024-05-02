@@ -1173,7 +1173,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #347e99;
+  background: #05ffff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1416,9 +1416,10 @@ pre .javascript .function {
   width: 100%;
 }
 .with-love {
-  color: #ff0000;
+  color: #000000;
   display: inline-block;
   margin: 0 5px;
+  animation: iconAnimate 1.33s ease-in-out infinite;
 }
 .powered-by,
 .theme-info {
@@ -1533,7 +1534,7 @@ pre .javascript .function {
 }
 @media (min-width: 1200px) {
   .post-body {
-    font-size: 1.125em;
+    font-size: 0.875em;
   }
 }
 .post-body .exturl .fa {
@@ -1554,7 +1555,7 @@ pre .javascript .function {
   transform: rotate(30deg);
 }
 .post-button {
-  margin-top: 40px;
+  margin-top: 0px;
   text-align: center;
 }
 .use-motion .post-block,
@@ -1827,7 +1828,7 @@ pre .javascript .function {
   color: #999;
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 0.75em;
-  margin: 3px 0 60px 0;
+  margin: 3px 0 3px 0;
   text-align: center;
 }
 .posts-expand .post-meta .post-description {
@@ -1976,6 +1977,13 @@ pre .javascript .function {
 }
 #qr p {
   text-align: center;
+}
+.post-copyright {
+  background: var(--card-bg-color);
+  border-left: 3px solid #ff2a2a;
+  list-style: none;
+  margin: 2em 0 0;
+  padding: 0.5em 1em;
 }
 .category-all-page .category-all-title {
   text-align: center;
@@ -2460,7 +2468,7 @@ ul.breadcrumb li + li:last-child {
 }
 .post-block {
   background: var(--content-bg-color);
-  border-radius: initial;
+  border-radius: 16px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
   padding: 40px;
 }
