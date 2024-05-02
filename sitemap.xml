@@ -2,18 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://flysec-01.github.io/2024/05/01/%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/</loc>
+    <loc>http://flysec-01.github.io/2024/05/01/%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%AE%80%E4%BB%8B/</loc>
     
-    <lastmod>2024-05-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://flysec-01.github.io/2024/05/01/hello-world/</loc>
-    
-    <lastmod>2024-05-01</lastmod>
+    <lastmod>2024-05-02</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -27,13 +18,6 @@
     <priority>1.0</priority>
   </url>
 
-  
-  <url>
-    <loc>http://flysec-01.github.io/tags/%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/</loc>
-    <lastmod>2024-05-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
   
 
   
