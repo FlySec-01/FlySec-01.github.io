@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>XSS漏洞原理 - infomatrix</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="XSS漏洞原理 - infomatrix" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://flyblog.xzy/2024/05/17/XSS%20%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-05-17T06:00:00.000Z" />
+  
+  <meta property="og:article:author" content="Fly" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">F</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">归档</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">朋友</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">项目</a>
+            
+            
+            
+            <a class="nav-item" href="/about">关于我</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/漏洞原理/">漏洞原理</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>May</span>
+            <span>17,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">XSS漏洞原理</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h3 id="1-反射型XSS（Reflected-XSS）"><a href="#1-反射型XSS（Reflected-XSS）" class="headerlink" title="1. 反射型XSS（Reflected XSS）"></a>1. 反射型XSS（Reflected XSS）</h3><h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>反射型XSS通常发生在当应用程序将用户提供的数据立即包含在响应中时。攻击者诱使用户点击一个包含恶意脚本的链接，这个脚本会在用户的浏览器中执行。</p>
+<h4 id="攻击步骤"><a href="#攻击步骤" class="headerlink" title="攻击步骤"></a>攻击步骤</h4><ol>
+<li>攻击者构造一个包含恶意脚本的URL。</li>
+<li>诱使用户点击该URL。</li>
+<li>服务器处理请求并在响应中反射该恶意脚本。</li>
+<li>用户的浏览器执行脚本，攻击者可能窃取用户的敏感信息或执行其他恶意操作。</li>
+</ol>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>假设一个搜索页面通过URL参数直接显示用户输入的搜索关键词：<br><code>http://example.com/search?q=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;</code><br>用户点击后，浏览器会执行脚本弹出一个警告框。</p>
+<hr>
+<h3 id="2-存储型XSS（Stored-XSS）"><a href="#2-存储型XSS（Stored-XSS）" class="headerlink" title="2. 存储型XSS（Stored XSS）"></a>2. 存储型XSS（Stored XSS）</h3><h4 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h4><p>存储型XSS发生在当恶意脚本被永久存储在目标服务器上（例如在数据库中）时。任何访问包含该数据的页面的用户都会执行恶意脚本。</p>
+<h4 id="攻击步骤-1"><a href="#攻击步骤-1" class="headerlink" title="攻击步骤"></a>攻击步骤</h4><ol>
+<li>攻击者将恶意脚本注入到应用程序的输入字段中，例如评论区、论坛帖子或用户配置文件。</li>
+<li>服务器将恶意脚本存储在数据库中。</li>
+<li>其他用户访问包含恶意脚本的页面时，浏览器会执行该脚本。</li>
+</ol>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><p>攻击者在评论区发布一条评论：<br><code>&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;</code><br>当其他用户查看评论时，脚本在他们的浏览器中执行，浏览器会执行脚本弹出一个警告框。。</p>
+<hr>
+<h3 id="3-基于DOM的XSS（DOM-based-XSS）"><a href="#3-基于DOM的XSS（DOM-based-XSS）" class="headerlink" title="3. 基于DOM的XSS（DOM-based XSS）"></a>3. 基于DOM的XSS（DOM-based XSS）</h3><h4 id="描述-2"><a href="#描述-2" class="headerlink" title="描述"></a>描述</h4><p>基于DOM的XSS发生在客户端，恶意脚本通过修改页面的DOM（文档对象模型）结构来执行。这种类型的XSS不需要与服务器进行交互。</p>
+<h4 id="攻击步骤-2"><a href="#攻击步骤-2" class="headerlink" title="攻击步骤"></a>攻击步骤</h4><ol>
+<li>攻击者构造一个包含恶意脚本的URL。</li>
+<li>诱使用户点击该URL。</li>
+<li>用户的浏览器解析URL并执行恶意脚本，修改DOM结构。</li>
+</ol>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><p>假设有一个JavaScript代码读取URL参数并将其插入到页面中：<br>javascript<br>复制代码<br><code>document.getElementById(&quot;output&quot;).innerHTML = location.search;</code><br>用户点击链接：<br>html<br>复制代码<br><code>http://example.com/page?name=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;</code><br>脚本被插入并执行。</p>
+<hr>
+<h3 id="防御措施"><a href="#防御措施" class="headerlink" title="防御措施"></a>防御措施</h3><h4 id="输入验证和编码"><a href="#输入验证和编码" class="headerlink" title="输入验证和编码"></a>输入验证和编码</h4><ul>
+<li>对用户输入进行严格验证和清理，防止恶意脚本注入。</li>
+<li>对输出到HTML的内容进行适当编码（例如HTML实体编码），防止脚本执行。</li>
+</ul>
+<h4 id="使用安全库和框架"><a href="#使用安全库和框架" class="headerlink" title="使用安全库和框架"></a>使用安全库和框架</h4><ul>
+<li>使用可信的安全库和框架，它们通常具有内置的XSS防护机制。</li>
+<li>如React、Angular等前端框架能自动对输出进行编码。</li>
+</ul>
+<h4 id="内容安全策略（CSP）"><a href="#内容安全策略（CSP）" class="headerlink" title="内容安全策略（CSP）"></a>内容安全策略（CSP）</h4><ul>
+<li>配置内容安全策略（CSP），限制页面上可执行的脚本来源，防止恶意脚本执行。</li>
+</ul>
+<h4 id="避免直接操作DOM"><a href="#避免直接操作DOM" class="headerlink" title="避免直接操作DOM"></a>避免直接操作DOM</h4><ul>
+<li>尽量避免使用<code>innerHTML</code>和<code>document.write</code>等直接操作DOM的方法，使用更安全的DOM操作方法。</li>
+</ul>
+<h4 id="HTTPOnly和Secure标志"><a href="#HTTPOnly和Secure标志" class="headerlink" title="HTTPOnly和Secure标志"></a>HTTPOnly和Secure标志</h4><ul>
+<li>对敏感的cookie设置<code>HttpOnly</code>和<code>Secure</code>标志，防止脚本通过document.cookie访问这些cookie。<br>通过理解和防范这些XSS漏洞类型，可以有效地提高应用程序的安全性，保护用户的敏感信息和隐私。</li>
+</ul>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Fly 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/XSS/" class="tag">#XSS</a><a href="/tags/Web/" class="tag">#Web</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        <a class="prev"></a>
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+        </div>
+        <!-- <span>&copy; 2024 Fly<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span> -->
+        
+        <br>
+        <span class="footer-extra-description">打造高质量的黑客社区</span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
