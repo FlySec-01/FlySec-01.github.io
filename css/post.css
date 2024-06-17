@@ -2,8 +2,10 @@ body {
   background-color: var(--body-bg);
 }
 
+/* 文章祖逖 */
 .post {
-  margin: 128px 0;
+  margin: 0;
+  padding: 128px;
 }
 
 .meta .categories {
@@ -24,7 +26,7 @@ body {
 }
 
 .meta .title {
-  font-size: 48px;
+  font-size: 36px;
   margin-top: 16px;
 }
 
@@ -65,6 +67,17 @@ hr,
   margin-right: auto;
   padding: 0 16px;
 }
+/* font 字体大小 */
+.content p{
+  font-size: 16px;
+}
+.content li{
+  font-size: 16px;
+}
+
+
+
+/*  */
 
 .content p img,
 .content .block-large img {

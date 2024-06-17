@@ -1,11 +1,11 @@
 .divider, hr {
     border: none;
-    border-top: 1px solid var(--white-1);
+    border-top: 1px solid white;
     margin: 32px auto;
 }
 
 .divider {
-    margin: 64px auto;
+    margin: 16px auto;
 }
 
 img {
@@ -30,7 +30,7 @@ pre {
 
 code {
     font-size: 12px;
-    background-color: var(--white-1);
+    background-color: gray;
     padding: 2px 4px;
     border-radius: 4px;
 }
