@@ -2,14 +2,14 @@ body {
   background-color: var(--body-bg);
 }
 
-/* 文章祖逖 */
+/* 文章主体 */
 .post {
   margin: 0;
-  padding: 128px;
+  padding: 40px 80px;
 }
-
+/* 分类 */
 .meta .categories {
-  color: var(--link);
+  color: white;
   margin-bottom: 6px;
   font-weight: 600;
 }
